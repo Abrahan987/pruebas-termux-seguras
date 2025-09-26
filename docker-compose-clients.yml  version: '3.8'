@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  client:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "pip install -r /app/requirements.txt || true &&
+             python /app/client_test_safe.py ${TARGET:-http://127.0.0.1:8080} \
+             --concurrency ${CONCURRENCY:-5} --duration ${DURATION:-90} --path ${PATH:-/} \
+             --delay ${DELAY:-0} --confirm-own"
+    environment:
+      - TARGET
+      - CONCURRENCY
+      - DURATION
+      - PATH
+      - DELAY
+    restart: "no"
